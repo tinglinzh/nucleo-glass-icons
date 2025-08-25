@@ -5,5 +5,9 @@ export default antfu(
   {
     type: 'lib',
     pnpm: true,
+    rules: {
+      'no-console': 'off',
+      'ts/explicit-function-return-type': 'off',
+    },
   },
 )

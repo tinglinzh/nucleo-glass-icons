@@ -1,9 +1,6 @@
 import type { IconComponent, IconData } from '../types'
 import { defineComponent, h } from 'vue'
-import { createVueIconFactory, getSvgAttributes } from '../core'
-
-// Vue-specific icon factory (currently unused)
-const _createVueIcon = createVueIconFactory(h)
+import { getSvgAttributes } from '../types'
 
 /**
  * Create a Vue icon component from icon data

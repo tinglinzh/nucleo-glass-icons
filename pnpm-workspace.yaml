@@ -8,6 +8,7 @@ catalog:
   cheerio: ^1.0.0-rc.12
   react: ^18.2.0
   rolldown: 1.0.0-beta.34
+  rolldown-plugin-dts: ^0.15.9
   rollup-plugin-visualizer: ^6.0.3
   svgo: ^3.2.0
   vue: ^3.4.0

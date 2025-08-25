@@ -1,15 +1,45 @@
 import type { IconComponent, IconData, IconProps } from '../types'
 import React from 'react'
-import { createReactIconFactory } from '../core'
+import { getSvgAttributes } from '../types'
 
-// React-specific icon factory
-const createReactIcon = createReactIconFactory(React.createElement)
+/**
+ * Create a React icon component factory
+ */
+export function createReactIconFactory() {
+  return function createIcon(iconData: IconData): IconComponent {
+    const IconComponent: React.ComponentType<IconProps> = (props: IconProps): React.ReactElement => {
+      const svgProps = getSvgAttributes(iconData, props)
+
+      return React.createElement(
+        'svg',
+        svgProps,
+        React.createElement('g', { dangerouslySetInnerHTML: { __html: iconData.content } }),
+      )
+    }
+
+    IconComponent.displayName = `Icon${iconData.name}`
+
+    return IconComponent
+  }
+}
 
 /**
  * Create a React icon component from icon data
  */
 export function createIcon(iconData: IconData): IconComponent {
-  return createReactIcon(iconData)
+  const IconComponent: React.ComponentType<IconProps> = (props: IconProps): React.ReactElement => {
+    const svgProps = getSvgAttributes(iconData, props)
+
+    return React.createElement(
+      'svg',
+      svgProps,
+      React.createElement('g', { dangerouslySetInnerHTML: { __html: iconData.content } }),
+    )
+  }
+
+  IconComponent.displayName = `Icon${iconData.name}`
+
+  return IconComponent
 }
 
 /**
@@ -22,3 +52,7 @@ export const Icon: React.FC<IconProps & { data: IconData }> = ({ data, ...props 
 
 // Re-export types for convenience
 export type { IconComponent, IconData, IconProps } from '../types'
+
+// Re-export all icon components
+// @ts-expect-error clear error
+export * from './icons'

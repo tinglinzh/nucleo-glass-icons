@@ -3,9 +3,9 @@
 import { exec } from 'node:child_process'
 import { existsSync } from 'node:fs'
 import { join } from 'node:path'
+import { process } from 'node:process'
 
 const statsFiles = [
-  { name: 'Main Bundle', file: 'dist/stats-main.html' },
   { name: 'React Bundle', file: 'dist/stats-react.html' },
   { name: 'Vue Bundle', file: 'dist/stats-vue.html' },
 ]
@@ -50,15 +50,14 @@ if (process.argv[2]) {
     }
   }
   else {
-    console.log('❌ Invalid choice. Please select 1, 2, or 3.')
+    console.log('❌ Invalid choice. Please select 1, or 2.')
   }
 }
 else {
   console.log('Usage:')
-  console.log('  node scripts/view-stats.js [1|2|3]')
+  console.log('  node scripts/view-stats.js [1|2]')
   console.log('')
   console.log('Examples:')
-  console.log('  node scripts/view-stats.js 1  # Open main bundle stats')
-  console.log('  node scripts/view-stats.js 2  # Open React bundle stats')
-  console.log('  node scripts/view-stats.js 3  # Open Vue bundle stats')
+  console.log('  node scripts/view-stats.js 1  # Open React bundle stats')
+  console.log('  node scripts/view-stats.js 2  # Open Vue bundle stats')
 }

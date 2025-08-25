@@ -1,7 +1,7 @@
 {
   "name": "nucleo-glass-icons",
   "type": "module",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "private": false,
   "publishConfig": {
     "access": "public"
@@ -25,11 +25,6 @@
   ],
   "sideEffects": false,
   "exports": {
-    ".": {
-      "types": "./dist/main/index.d.ts",
-      "import": "./dist/main/index.mjs",
-      "require": "./dist/main/index.cjs"
-    },
     "./react": {
       "types": "./dist/react/index.d.ts",
       "import": "./dist/react/index.mjs",
@@ -40,38 +35,26 @@
       "import": "./dist/vue/index.mjs",
       "require": "./dist/vue/index.cjs"
     },
-    "./icons/*": {
-      "types": "./dist/icons/*.d.ts",
-      "import": "./dist/icons/*.mjs",
-      "require": "./dist/icons/*.cjs"
-    },
     "./package.json": "./package.json"
   },
-  "main": "./dist/main/index.cjs",
-  "module": "./dist/main/index.mjs",
-  "types": "./dist/main/index.d.ts",
   "files": [
     "dist",
     "icons"
   ],
   "scripts": {
-    "build": "pnpm run generate && rolldown -c rolldown.config.ts",
+    "build": "rolldown -c rolldown.config.ts",
     "dev": "rolldown -c rolldown.config.ts --watch",
     "generate": "tsx scripts/generate.ts",
     "lint": "eslint",
     "prepublishOnly": "pnpm run build",
-    "release": "node scripts/release.js",
-    "release:patch": "node scripts/release.js patch",
-    "release:minor": "node scripts/release.js minor",
-    "release:major": "node scripts/release.js major",
+
     "start": "tsx src/index.ts",
     "typecheck": "tsc --noEmit",
     "prepare": "simple-git-hooks",
     "analyze": "pnpm run build && node scripts/view-stats.js",
     "stats": "node scripts/view-stats.js",
-    "stats:main": "node scripts/view-stats.js 1",
-    "stats:react": "node scripts/view-stats.js 2",
-    "stats:vue": "node scripts/view-stats.js 3"
+    "stats:react": "node scripts/view-stats.js 1",
+    "stats:vue": "node scripts/view-stats.js 2"
   },
   "peerDependencies": {
     "react": ">=16.8.0",
@@ -95,6 +78,7 @@
     "lint-staged": "catalog:cli",
     "react": "catalog:",
     "rolldown": "catalog:",
+    "rolldown-plugin-dts": "catalog:",
     "rollup-plugin-visualizer": "catalog:",
     "simple-git-hooks": "catalog:cli",
     "svgo": "catalog:",

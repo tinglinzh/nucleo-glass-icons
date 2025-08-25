@@ -10,7 +10,7 @@
 - ⚛️ **多框架支持** - 支持 React 和 Vue
 - 📦 **动态导入** - 避免一次性打包所有图标
 - 🎯 **TypeScript 支持** - 完整的类型定义和智能提示
-- 🔧 **灵活样式** - 支持自定义大小、颜色、className
+- 🔧 **灵活样式** - 支持自定义大小、类名
 
 ### 安装
 
@@ -36,8 +36,8 @@ function App() {
       {/* 基本使用 */}
       <AppStack />
 
-      {/* 自定义大小和颜色 */}
-      <AppStack size={32} color="#3b82f6" />
+      {/* 自定义大小 */}
+      <AppStack size={32} />
 
       {/* 使用 className */}
       <AppStack className="my-icon" />
@@ -61,11 +61,11 @@ import { AppStack } from 'nucleo-glass-icons/vue'
     <!-- 基本使用 -->
     <AppStack />
 
-    <!-- 自定义大小和颜色 -->
-    <AppStack :size="32" color="#3b82f6" />
+    <!-- 自定义大小 -->
+    <AppStack :size="32" />
 
-    <!-- 使用 className -->
-    <AppStack class-name="my-icon" />
+    <!-- 使用 class -->
+    <AppStack class="my-icon" />
 
     <!-- 内联样式 -->
     <AppStack :style="{ margin: '10px' }" />
@@ -117,31 +117,36 @@ console.log(IconNames) // ['AppStack', ...]
 
 ### Props
 
+#### React 组件
+
 | 属性 | 类型 | 默认值 | 描述 |
 |------|------|--------|------|
 | `size` | `number \| string` | `24` | 图标大小（宽度和高度） |
-| `color` | `string` | `'currentColor'` | 图标颜色 |
 | `className` | `string` | - | CSS 类名 |
 | `style` | `React.CSSProperties \| Record<string, any> \| string` | - | 内联样式 |
 
+#### Vue 组件
+
+| 属性 | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `size` | `number \| string` | `24` | 图标大小（宽度和高度） |
+| `class` | `string` | - | CSS 类名 |
+| `style` | `object \| string` | - | 内联样式 |
+
 ### 开发
-
-#### 添加新图标
-
-1. 将 SVG 文件放入 `/public/icons/` 目录
-2. 运行生成脚本：
-
-```bash
-pnpm run generate
-```
 
 #### 构建
 
 ```bash
 # 使用 Rolldown 构建（推荐）
 pnpm run build
-
 ```
+
+构建过程会自动：
+1. 从 `public/icons/index.json` 读取图标数据
+2. 生成 React 和 Vue 图标组件
+3. 打包所有构建产物
+4. 自动清理临时生成的文件
 
 #### 包分析
 
@@ -150,9 +155,6 @@ pnpm run build
 ```bash
 # 查看所有可用报告
 pnpm run stats
-
-# 直接打开主入口分析报告（treemap 视图）
-pnpm run stats:main
 
 # 直接打开 React 入口分析报告（sunburst 视图）
 pnpm run stats:react

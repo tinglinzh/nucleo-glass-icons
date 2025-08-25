@@ -4,59 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-catalogs:
-  cli:
-    '@antfu/eslint-config':
-      specifier: ^4.10.1
-      version: 4.10.1
-    bumpp:
-      specifier: ^10.1.0
-      version: 10.1.0
-    eslint:
-      specifier: ^9.22.0
-      version: 9.22.0
-    lint-staged:
-      specifier: ^15.5.0
-      version: 15.5.0
-    simple-git-hooks:
-      specifier: ^2.11.1
-      version: 2.11.1
-    tsx:
-      specifier: ^4.19.3
-      version: 4.19.3
-    typescript:
-      specifier: ^5.8.2
-      version: 5.8.2
-    vite:
-      specifier: ^6.2.1
-      version: 6.2.1
-  default:
-    '@types/react':
-      specifier: ^18.2.0
-      version: 18.3.24
-    cheerio:
-      specifier: ^1.0.0-rc.12
-      version: 1.1.2
-    react:
-      specifier: ^18.2.0
-      version: 18.3.1
-    rolldown:
-      specifier: 1.0.0-beta.34
-      version: 1.0.0-beta.34
-    rollup-plugin-visualizer:
-      specifier: ^6.0.3
-      version: 6.0.3
-    svgo:
-      specifier: ^3.2.0
-      version: 3.3.2
-    vue:
-      specifier: ^3.4.0
-      version: 3.5.19
-  types:
-    '@types/node':
-      specifier: ^22.13.10
-      version: 22.13.10
-
 importers:
 
   .:
@@ -109,6 +56,12 @@ importers:
       vue:
         specifier: 'catalog:'
         version: 3.5.19(typescript@5.8.2)
+
+  test-install:
+    dependencies:
+      nucleo-glass-icons:
+        specifier: link:..\nucleo-glass-icons
+        version: link:../nucleo-glass-icons
 
 packages:
 

@@ -2,7 +2,7 @@ name: Node.js Package
 
 on:
   release:
-    types: [created] # 仅在创建 Release 时触发
+    types: [created]
 
 jobs:
   publish-npm:
@@ -32,13 +32,28 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Bump version (optional)
-        run: npm version patch --no-git-tag-version
+      - name: Check & Bump version if needed
+        id: check-version
+        run: |
+          PKG_NAME=$(node -p "require('./package.json').name")
+          PKG_VERSION=$(node -p "require('./package.json').version")
+
+          echo "Current version in package.json: $PKG_VERSION"
+
+          if npm view $PKG_NAME@$PKG_VERSION version > /dev/null 2>&1; then
+            echo "Version $PKG_VERSION already exists on npm. Bumping patch..."
+            NEW_VERSION=$(npm version patch --no-git-tag-version | sed 's/v//')
+          else
+            echo "Version $PKG_VERSION not found on npm. Using current version."
+            NEW_VERSION=$PKG_VERSION
+          fi
+
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
       - name: Commit version change only
         run: |
           git add package.json pnpm-lock.yaml || true
-          git commit -m "chore: bump version [skip ci]" || echo "No version changes to commit"
+          git commit -m "chore: release v${{ steps.check-version.outputs.new_version }} [skip ci]" || echo "No version changes to commit"
           git push origin main || echo "No changes pushed"
 
       - name: Install dependencies

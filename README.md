@@ -14,12 +14,24 @@
 
 ## 安装
 
+### 完整包（包含所有框架支持）
+
 ```bash
 npm install nucleo-glass-icons
 # 或
 pnpm add nucleo-glass-icons
 # 或
 yarn add nucleo-glass-icons
+```
+
+### 仅安装特定框架
+
+```bash
+# 仅安装 React 支持
+pnpm add nucleo-glass-icons/react
+
+# 仅安装 Vue 支持
+pnpm add nucleo-glass-icons/vue
 ```
 
 ## 使用方法

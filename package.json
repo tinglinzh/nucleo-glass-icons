@@ -1,7 +1,7 @@
 {
   "name": "nucleo-glass-icons",
   "type": "module",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "private": false,
   "publishConfig": {
     "access": "public"
@@ -26,19 +26,19 @@
   "sideEffects": false,
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
     "./react": {
-      "types": "./dist/react/index.d.ts",
-      "import": "./dist/react/index.mjs",
-      "require": "./dist/react/index.cjs"
+      "types": "./dist/react.d.mts",
+      "import": "./dist/react.mjs",
+      "require": "./dist/react.cjs"
     },
     "./vue": {
-      "types": "./dist/vue/index.d.ts",
-      "import": "./dist/vue/index.mjs",
-      "require": "./dist/vue/index.cjs"
+      "types": "./dist/vue.d.mts",
+      "import": "./dist/vue.mjs",
+      "require": "./dist/vue.cjs"
     },
     "./icons/*": {
       "types": "./dist/icons/*.d.ts",

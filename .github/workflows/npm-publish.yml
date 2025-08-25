@@ -29,17 +29,17 @@ jobs:
 
       - name: Set up Git user
         run: |
-          git config --global user.name "tinglinzh"
-          git config --global user.email "liucheng0416@icloud.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Bump version (optional)
-        run: npm version patch
+        run: npm version patch --no-git-tag-version
 
-      - name: Commit changes (if needed)
+      - name: Commit version change only
         run: |
-          git add .
-          git commit -m "Bump version" || echo "No changes to commit"
-          git push origin main
+          git add package.json pnpm-lock.yaml || true
+          git commit -m "chore: bump version [skip ci]" || echo "No version changes to commit"
+          git push origin main || echo "No changes pushed"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

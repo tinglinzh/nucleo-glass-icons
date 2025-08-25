@@ -11,6 +11,7 @@
 - 📦 **动态导入** - 避免一次性打包所有图标
 - 🎯 **TypeScript 支持** - 完整的类型定义和智能提示
 - 🔧 **灵活样式** - 支持自定义大小、类名
+- 🎨 **渐变颜色** - 支持自定义渐变停止颜色
 
 ### 安装
 
@@ -44,6 +45,17 @@ function App() {
 
       {/* 内联样式 */}
       <AppStack style={{ margin: '10px' }} />
+
+      {/* 自定义渐变颜色 */}
+      <AppStack stopColor1="#3b82f6" stopColor2="#1e40af" />
+
+      {/* 组合使用 */}
+      <AppStack
+        size={48}
+        className="custom-icon"
+        stopColor1="#ef4444"
+        stopColor2="#dc2626"
+      />
     </div>
   )
 }
@@ -69,6 +81,17 @@ import { AppStack } from 'nucleo-glass-icons/vue'
 
     <!-- 内联样式 -->
     <AppStack :style="{ margin: '10px' }" />
+
+    <!-- 自定义渐变颜色 -->
+    <AppStack stop-color1="#3b82f6" stop-color2="#1e40af" />
+
+    <!-- 组合使用 -->
+    <AppStack
+      :size="48"
+      class="custom-icon"
+      stop-color1="#ef4444"
+      stop-color2="#dc2626"
+    />
   </div>
 </template>
 ```
@@ -82,7 +105,14 @@ import { AppStackData } from 'nucleo-glass-icons'
 import { Icon } from 'nucleo-glass-icons/react'
 
 function DynamicIcon() {
-  return <Icon data={AppStackData} size={24} />
+  return (
+    <Icon
+      data={AppStackData}
+      size={24}
+      stopColor1="#10b981"
+      stopColor2="#059669"
+    />
+  )
 }
 ```
 
@@ -95,7 +125,12 @@ import { Icon } from 'nucleo-glass-icons/vue'
 </script>
 
 <template>
-  <Icon :data="AppStackData" :size="24" />
+  <Icon
+    :data="AppStackData"
+    :size="24"
+    stop-color1="#10b981"
+    stop-color2="#059669"
+  />
 </template>
 ```
 
@@ -112,7 +147,7 @@ import { IconNames, Icons } from 'nucleo-glass-icons/vue'
 console.log(Icons) // { AppStack: Component, ... }
 
 // 所有图标名称
-console.log(IconNames) // ['AppStack', ...]
+console.log(IconNames) // ['AppStack', ... ]
 ```
 
 ### Props
@@ -124,6 +159,8 @@ console.log(IconNames) // ['AppStack', ...]
 | `size` | `number \| string` | `24` | 图标大小（宽度和高度） |
 | `className` | `string` | - | CSS 类名 |
 | `style` | `React.CSSProperties \| Record<string, any> \| string` | - | 内联样式 |
+| `stopColor1` | `string` | `'#575757'` | 第一个渐变停止颜色（替换 #575757） |
+| `stopColor2` | `string` | `'#151515'` | 第二个渐变停止颜色（替换 #151515） |
 
 #### Vue 组件
 
@@ -132,6 +169,34 @@ console.log(IconNames) // ['AppStack', ...]
 | `size` | `number \| string` | `24` | 图标大小（宽度和高度） |
 | `class` | `string` | - | CSS 类名 |
 | `style` | `object \| string` | - | 内联样式 |
+| `stopColor1` | `string` | `'#575757'` | 第一个渐变停止颜色（替换 #575757） |
+| `stopColor2` | `string` | `'#151515'` | 第二个渐变停止颜色（替换 #151515） |
+
+### 渐变颜色说明
+
+图标中的渐变颜色会自动替换：
+
+- `stop-color="#575757"` → 使用 `stopColor1` 的值
+- `stop-color="#151515"` → 使用 `stopColor2` 的值
+
+**示例：**
+```tsx
+// 原始 SVG 中的渐变
+<linearGradient id="1752500502790-2257412_heart_existing_0_ik394vb0b" x1="8.505" y1="3" x2="8.505" y2="21.733" gradientUnits="userSpaceOnUse">
+  <stop stop-color="#575757"></stop>
+  <stop offset="1" stop-color="#151515"></stop>
+</linearGradient>
+```
+
+```tsx
+// 使用自定义颜色后
+<AppStack stopColor1="#3b82f6" stopColor2="#1e40af" />
+// 会生成：
+// <stop stop-color="#3b82f6"></stop>
+// <stop offset="1" stop-color="#1e40af"></stop>
+```
+
+**注意：** 一个 SVG 中可能有多个相同的 `stop-color` 值，都会被替换为对应的变量。
 
 ### 开发
 

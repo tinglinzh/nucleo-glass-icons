@@ -18,6 +18,18 @@ export interface IconProps {
   style?: CSSProperties | Record<string, any> | string
 
   /**
+   * First stop color for gradients (replaces #575757)
+   * @default '#575757'
+   */
+  stopColor1?: string
+
+  /**
+   * Second stop color for gradients (replaces #151515)
+   * @default '#151515'
+   */
+  stopColor2?: string
+
+  /**
    * Additional SVG attributes
    */
   [key: string]: any
@@ -54,17 +66,19 @@ export function createIconData(
   }
 }
 
-export function normalizeIconProps(props: IconProps = {}): Required<Pick<IconProps, 'size'>> & IconProps {
-  const { size = 24, ...rest } = props
+export function normalizeIconProps(props: IconProps = {}): Required<Pick<IconProps, 'size' | 'stopColor1' | 'stopColor2'>> & IconProps {
+  const { size = 24, stopColor1 = '#575757', stopColor2 = '#151515', ...rest } = props
 
   return {
     size,
+    stopColor1,
+    stopColor2,
     ...rest,
   }
 }
 
 export function getSvgAttributes(iconData: IconData, props: IconProps): Record<string, any> {
-  const { size, className, style, ...rest } = normalizeIconProps(props)
+  const { size, className, style, stopColor1, stopColor2, ...rest } = normalizeIconProps(props)
 
   const sizeValue = typeof size === 'number' ? `${size}px` : size
 
@@ -74,6 +88,8 @@ export function getSvgAttributes(iconData: IconData, props: IconProps): Record<s
     viewBox: iconData.viewBox,
     className,
     style,
+    stopColor1,
+    stopColor2,
     ...rest,
   }
 }

@@ -92,8 +92,13 @@ const ${componentName}Data = {
 }
 
 export const ${componentName}: React.FC<IconProps> = (props) => {
-  const { size = 24, className, style, ...rest } = props
+  const { size = 24, className, style, stopColor1 = '#575757', stopColor2 = '#151515', ...rest } = props
   const sizeValue = typeof size === 'number' ? \`\${size}px\` : size
+  
+  // Replace stop-color values in SVG content
+  const processedContent = ${componentName}Data.content
+    .replace(/stop-color="#575757"/g, \`stop-color="\${stopColor1}"\`)
+    .replace(/stop-color="#151515"/g, \`stop-color="\${stopColor2}"\`)
   
   return React.createElement('svg', {
     width: sizeValue,
@@ -103,7 +108,7 @@ export const ${componentName}: React.FC<IconProps> = (props) => {
     style,
     ...rest,
   }, React.createElement('g', { 
-    dangerouslySetInnerHTML: { __html: \`${content}\` } 
+    dangerouslySetInnerHTML: { __html: processedContent } 
   }))
 }
 
@@ -119,7 +124,7 @@ function generateVueIcon(icon: any, componentName: string): string {
   const viewBoxMatch = icon.svg.match(/viewBox="([^"]+)"/)
   const viewBox = viewBoxMatch ? viewBoxMatch[1] : '0 0 24 24'
 
-  return `import { defineComponent, h } from 'vue'
+  return `import { defineComponent, h, computed } from 'vue'
 
 const ${componentName}Data = {
   name: '${componentName}',
@@ -133,8 +138,16 @@ export const ${componentName} = defineComponent({
     size: { type: [Number, String], default: 24 },
     class: String,
     style: [Object, String],
+    stopColor1: { type: String, default: '#575757' },
+    stopColor2: { type: String, default: '#151515' },
   },
   setup(props, { attrs }) {
+    const processedContent = computed(() => {
+      return ${componentName}Data.content
+        .replace(/stop-color="#575757"/g, \`stop-color="\${props.stopColor1}"\`)
+        .replace(/stop-color="#151515"/g, \`stop-color="\${props.stopColor2}"\`)
+    })
+
     return () => {
       const { size = 24, class: className, style } = props
       const sizeValue = typeof size === 'number' ? \`\${size}px\` : size
@@ -146,7 +159,7 @@ export const ${componentName} = defineComponent({
         class: className,
         style,
         ...attrs,
-      }, [h('g', { innerHTML: \`${content}\` })])
+      }, [h('g', { innerHTML: processedContent.value })])
     }
   },
 })

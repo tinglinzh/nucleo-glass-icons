@@ -171,12 +171,6 @@ pnpm run analyze
 pnpm run dev
 ```
 
-### 测试
-
-```bash
-pnpm test
-```
-
 ## 技术栈
 
 - **构建工具**: Rolldown
@@ -188,15 +182,3 @@ pnpm test
 ## 许可证
 
 MIT
-
-## 发布
-
-```bash
-# 自动发布（patch 版本）
-pnpm run release
-
-# 指定版本类型发布
-pnpm run release:patch    # 补丁版本 (1.0.0 -> 1.0.1)
-pnpm run release:minor    # 次要版本 (1.0.0 -> 1.1.0)
-pnpm run release:major    # 主要版本 (1.0.0 -> 2.0.0)
-```

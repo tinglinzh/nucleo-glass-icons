@@ -2,13 +2,18 @@ name: Node.js Package
 
 on:
   release:
-    types: [created]  # 仅在创建 Release 时触发
+    types: [created] # 仅在创建 Release 时触发
 
 jobs:
   publish-npm:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Switch to main
+        run: git checkout main
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -21,15 +26,15 @@ jobs:
           node-version: '18'
           cache: pnpm
           registry-url: 'https://registry.npmjs.org'
-          
+
       - name: Set up Git user
         run: |
           git config --global user.name "tinglinzh"
           git config --global user.email "liucheng0416@icloud.com"
-          
+
       - name: Bump version (optional)
-        run: npm version patch 
-        
+        run: npm version patch
+
       - name: Commit changes (if needed)
         run: |
           git add .

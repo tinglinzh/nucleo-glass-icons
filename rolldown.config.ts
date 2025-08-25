@@ -16,6 +16,10 @@ export default defineConfig([
         format: 'cjs',
         sourcemap: true,
       },
+      {
+        file: 'dist/main/index.d.ts',
+        format: 'esm',
+      },
     ],
     external: ['react', 'vue'],
     resolve: {
@@ -46,6 +50,10 @@ export default defineConfig([
         format: 'cjs',
         sourcemap: true,
       },
+      {
+        file: 'dist/react/index.d.ts',
+        format: 'esm',
+      },
     ],
     external: ['react', 'vue'],
     resolve: {
@@ -75,6 +83,10 @@ export default defineConfig([
         file: 'dist/vue/index.cjs',
         format: 'cjs',
         sourcemap: true,
+      },
+      {
+        file: 'dist/vue/index.d.ts',
+        format: 'esm',
       },
     ],
     external: ['react', 'vue'],

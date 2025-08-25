@@ -1,7 +1,7 @@
 {
   "name": "nucleo-glass-icons",
   "type": "module",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "private": false,
   "publishConfig": {
     "access": "public"
@@ -26,19 +26,19 @@
   "sideEffects": false,
   "exports": {
     ".": {
-      "types": "./dist/index.d.mts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "types": "./dist/main/index.d.mts",
+      "import": "./dist/main/index.mjs",
+      "require": "./dist/main/index.cjs"
     },
     "./react": {
-      "types": "./dist/react.d.mts",
-      "import": "./dist/react.mjs",
-      "require": "./dist/react.cjs"
+      "types": "./dist/react/index.d.mts",
+      "import": "./dist/react/index.mjs",
+      "require": "./dist/react/index.cjs"
     },
     "./vue": {
-      "types": "./dist/vue.d.mts",
-      "import": "./dist/vue.mjs",
-      "require": "./dist/vue.cjs"
+      "types": "./dist/vue/index.d.mts",
+      "import": "./dist/vue/index.mjs",
+      "require": "./dist/vue/index.cjs"
     },
     "./icons/*": {
       "types": "./dist/icons/*.d.ts",
@@ -47,9 +47,9 @@
     },
     "./package.json": "./package.json"
   },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/main/index.cjs",
+  "module": "./dist/main/index.mjs",
+  "types": "./dist/main/index.d.mts",
   "files": [
     "dist",
     "icons"

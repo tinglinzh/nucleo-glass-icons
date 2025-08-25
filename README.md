@@ -1,10 +1,10 @@
-# Icon Library
+## Icon Library
 
 本组件基于 [Nucleoapp](https://nucleoapp.com/svg-glass-icons) 提供的开源 **SVG Glass Icons** 封装而成，旨在方便在项目中直接使用这些图标。
 
 所有图标均来自 [Nucleoapp](https://nucleoapp.com/svg-glass-icons)，你也可以前往其官方网站复制并粘贴 SVG 代码进行使用。
 
-## 特性
+### 特性
 
 - 🌳 **Tree-shaking 友好** - 只打包你使用的图标
 - ⚛️ **多框架支持** - 支持 React 和 Vue
@@ -12,9 +12,7 @@
 - 🎯 **TypeScript 支持** - 完整的类型定义和智能提示
 - 🔧 **灵活样式** - 支持自定义大小、颜色、className
 
-## 安装
-
-### 完整包（包含所有框架支持）
+### 安装
 
 ```bash
 npm install nucleo-glass-icons
@@ -24,19 +22,9 @@ pnpm add nucleo-glass-icons
 yarn add nucleo-glass-icons
 ```
 
-### 仅安装特定框架
+### 使用方法
 
-```bash
-# 仅安装 React 支持
-pnpm add nucleo-glass-icons/react
-
-# 仅安装 Vue 支持
-pnpm add nucleo-glass-icons/vue
-```
-
-## 使用方法
-
-### React
+#### React
 
 ```tsx
 import { AppStack } from 'nucleo-glass-icons/react'
@@ -61,7 +49,7 @@ function App() {
 }
 ```
 
-### Vue
+#### Vue
 
 ```vue
 <script setup>
@@ -85,9 +73,9 @@ import { AppStack } from 'nucleo-glass-icons/vue'
 </template>
 ```
 
-### 动态导入
+#### 动态导入
 
-#### React
+##### React
 
 ```tsx
 import { AppStackData } from 'nucleo-glass-icons'
@@ -98,7 +86,7 @@ function DynamicIcon() {
 }
 ```
 
-#### Vue
+##### Vue
 
 ```vue
 <script setup>
@@ -111,7 +99,7 @@ import { Icon } from 'nucleo-glass-icons/vue'
 </template>
 ```
 
-### 批量导入
+#### 批量导入
 
 ```tsx
 // React
@@ -127,7 +115,7 @@ console.log(Icons) // { AppStack: Component, ... }
 console.log(IconNames) // ['AppStack', ...]
 ```
 
-## Props
+### Props
 
 | 属性 | 类型 | 默认值 | 描述 |
 |------|------|--------|------|
@@ -136,9 +124,9 @@ console.log(IconNames) // ['AppStack', ...]
 | `className` | `string` | - | CSS 类名 |
 | `style` | `React.CSSProperties \| Record<string, any> \| string` | - | 内联样式 |
 
-## 开发
+### 开发
 
-### 添加新图标
+#### 添加新图标
 
 1. 将 SVG 文件放入 `/public/icons/` 目录
 2. 运行生成脚本：
@@ -147,7 +135,7 @@ console.log(IconNames) // ['AppStack', ...]
 pnpm run generate
 ```
 
-### 构建
+#### 构建
 
 ```bash
 # 使用 Rolldown 构建（推荐）
@@ -155,7 +143,7 @@ pnpm run build
 
 ```
 
-### 包分析
+#### 包分析
 
 构建完成后，可以查看可视化的包分析报告：
 
@@ -176,14 +164,14 @@ pnpm run stats:vue
 pnpm run analyze
 ```
 
-### 开发模式
+#### 开发模式
 
 ```bash
 # 监听模式构建
 pnpm run dev
 ```
 
-## 技术栈
+### 技术栈
 
 - **构建工具**: Rolldown
 - **包分析**: rollup-plugin-visualizer
@@ -191,6 +179,6 @@ pnpm run dev
 - **DOM 解析**: Cheerio
 - **类型检查**: TypeScript
 
-## 许可证
+### 许可证
 
 MIT

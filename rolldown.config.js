@@ -7,12 +7,12 @@ export default defineConfig([
     input: 'src/index.ts',
     output: [
       {
-        file: 'dist/index.mjs',
+        file: 'dist/main/index.mjs',
         format: 'esm',
         sourcemap: true,
       },
       {
-        file: 'dist/index.cjs',
+        file: 'dist/main/index.cjs',
         format: 'cjs',
         sourcemap: true,
       },
@@ -23,11 +23,12 @@ export default defineConfig([
     },
     plugins: [
       visualizer({
-        filename: 'dist/stats-main.html',
+        filename: 'dist/main/stats.html',
         open: false,
         gzipSize: true,
         brotliSize: true,
         template: 'treemap',
+        emitFile: false,
       }),
     ],
   },
@@ -36,12 +37,12 @@ export default defineConfig([
     input: 'src/react.ts',
     output: [
       {
-        file: 'dist/react.mjs',
+        file: 'dist/react/index.mjs',
         format: 'esm',
         sourcemap: true,
       },
       {
-        file: 'dist/react.cjs',
+        file: 'dist/react/index.cjs',
         format: 'cjs',
         sourcemap: true,
       },
@@ -52,11 +53,12 @@ export default defineConfig([
     },
     plugins: [
       visualizer({
-        filename: 'dist/stats-react.html',
+        filename: 'dist/react/stats.html',
         open: false,
         gzipSize: true,
         brotliSize: true,
         template: 'sunburst',
+        emitFile: false,
       }),
     ],
   },
@@ -65,12 +67,12 @@ export default defineConfig([
     input: 'src/vue.ts',
     output: [
       {
-        file: 'dist/vue.mjs',
+        file: 'dist/vue/index.mjs',
         format: 'esm',
         sourcemap: true,
       },
       {
-        file: 'dist/vue.cjs',
+        file: 'dist/vue/index.cjs',
         format: 'cjs',
         sourcemap: true,
       },
@@ -81,11 +83,12 @@ export default defineConfig([
     },
     plugins: [
       visualizer({
-        filename: 'dist/stats-vue.html',
+        filename: 'dist/vue/stats.html',
         open: false,
         gzipSize: true,
         brotliSize: true,
         template: 'network',
+        emitFile: false,
       }),
     ],
   },

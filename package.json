@@ -1,0 +1,117 @@
+{
+  "name": "nucleo-glass-icons",
+  "type": "module",
+  "version": "0.1.0",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "packageManager": "pnpm@10.6.2",
+  "description": "A modern, tree-shakable icon library with glass morphism design, supporting React and Vue",
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/tinglinzh/nucleo-glass-icons#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tinglinzh/nucleo-glass-icons.git"
+  },
+  "bugs": "https://github.com/tinglinzh/nucleo-glass-icons/issues",
+  "keywords": [
+    "icons",
+    "react-icon",
+    "vue-icon",
+    "nucleo-icon",
+    "glass-icon",
+    "nucleo-glass-icons",
+    "svg-icon"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./react": {
+      "types": "./dist/react/index.d.ts",
+      "import": "./dist/react/index.mjs",
+      "require": "./dist/react/index.cjs"
+    },
+    "./vue": {
+      "types": "./dist/vue/index.d.ts",
+      "import": "./dist/vue/index.mjs",
+      "require": "./dist/vue/index.cjs"
+    },
+    "./icons/*": {
+      "types": "./dist/icons/*.d.ts",
+      "import": "./dist/icons/*.mjs",
+      "require": "./dist/icons/*.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "icons"
+  ],
+  "scripts": {
+    "build": "pnpm run generate && rolldown -c rolldown.config.js",
+    "dev": "rolldown -c rolldown.config.js --watch",
+    "generate": "tsx scripts/generate.ts",
+    "lint": "eslint",
+    "prepublishOnly": "nr build",
+    "release": "node scripts/release.js",
+    "release:patch": "node scripts/release.js patch",
+    "release:minor": "node scripts/release.js minor",
+    "release:major": "node scripts/release.js major",
+    "start": "tsx src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "prepare": "simple-git-hooks",
+    "analyze": "pnpm run build && node scripts/view-stats.js",
+    "stats": "node scripts/view-stats.js",
+    "stats:main": "node scripts/view-stats.js 1",
+    "stats:react": "node scripts/view-stats.js 2",
+    "stats:vue": "node scripts/view-stats.js 3"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "vue": ">=3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "vue": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "catalog:cli",
+    "@types/node": "catalog:types",
+    "@types/react": "catalog:",
+    "bumpp": "catalog:cli",
+    "cheerio": "catalog:",
+    "eslint": "catalog:cli",
+    "lint-staged": "catalog:cli",
+    "react": "catalog:",
+    "rolldown": "catalog:",
+    "rollup-plugin-visualizer": "catalog:",
+    "simple-git-hooks": "catalog:cli",
+    "svgo": "catalog:",
+    "tsx": "catalog:cli",
+    "typescript": "catalog:cli",
+    "vite": "catalog:cli",
+    "vitest": "catalog:testing",
+    "vitest-package-exports": "catalog:testing",
+    "vue": "catalog:",
+    "yaml": "catalog:testing"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm i --frozen-lockfile --ignore-scripts --offline && npx lint-staged"
+  },
+  "lint-staged": {
+    "*": "eslint --fix"
+  }
+}

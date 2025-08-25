@@ -6,7 +6,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "packageManager": "pnpm@10.6.2",
   "description": "Icon component package for React and Vue, built on the open-source SVG Glass Icons by Nucleo.",
   "license": "MIT",
   "homepage": "https://github.com/tinglinzh/nucleo-glass-icons#readme",

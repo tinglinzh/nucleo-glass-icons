@@ -185,9 +185,9 @@ export {
 ${componentNames.map(name => `  ${name}`).join(',\n')}
 }
 
-export const Icons = {
+export const Icons = [
 ${componentNames.map(name => `  ${name}`).join(',\n')}
-}
+]
 
 export const IconNames = [
 ${componentNames.map(name => `  '${name}'`).join(',\n')}
@@ -203,6 +203,10 @@ ${componentNames.map((name, index) => `import { ${name} } from './${fileName(ico
 export {
 ${componentNames.map(name => `  ${name}`).join(',\n')}
 }
+
+export const Icons = [
+${componentNames.map(name => `  ${name}`).join(',\n')}
+]
 
 export const IconNames = [
 ${componentNames.map(name => `  '${name}'`).join(',\n')}

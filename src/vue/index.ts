@@ -69,3 +69,7 @@ export const Icon = defineComponent({
 
 // Re-export types for convenience
 export type { IconComponent, IconData, IconProps } from '../types'
+
+// Re-export all icon components
+// @ts-expect-error clear error
+export * from './icons'

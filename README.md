@@ -1,29 +1,31 @@
 ## Icon Library
 
-本组件基于 [Nucleoapp](https://nucleoapp.com/svg-glass-icons) 提供的开源 **SVG Glass Icons** 封装而成，旨在方便在项目中直接使用这些图标。
+[**中文文档**](https://github.com/tinglinzh/nucleo-glass-icons/blob/main/README.zh-CN.md)
 
-所有图标均来自 [Nucleoapp](https://nucleoapp.com/svg-glass-icons)，你也可以前往其官方网站复制并粘贴 SVG 代码进行使用。
+This package wraps the open-source **SVG Glass Icons** provided by [Nucleoapp](https://nucleoapp.com/svg-glass-icons), making it easy to use these icons directly in your projects.
 
-### 特性
+All icons come from [Nucleoapp](https://nucleoapp.com/svg-glass-icons). You can also copy and paste the SVG code from the official website if needed.
 
-- 🌳 **Tree-shaking 友好** - 只打包你使用的图标
-- ⚛️ **多框架支持** - 支持 React 和 Vue
-- 📦 **动态导入** - 避免一次性打包所有图标
-- 🎯 **TypeScript 支持** - 完整的类型定义和智能提示
-- 🔧 **灵活样式** - 支持自定义大小、类名
-- 🎨 **渐变颜色** - 支持自定义渐变停止颜色
+### Features
 
-### 安装
+- 🌳 **Tree-shakable** – Only the icons you use will be included in your bundle
+- ⚛️ **Multi-framework support** – Works with both React and Vue
+- 📦 **Dynamic imports** – Avoid bundling all icons at once
+- 🎯 **TypeScript-ready** – Full type definitions and IntelliSense support
+- 🔧 **Flexible styling** – Supports custom sizes and class names
+- 🎨 **Gradient colors** – Customize gradient stop colors
+
+### Installation
 
 ```bash
 npm install nucleo-glass-icons
-# 或
+# or
 pnpm add nucleo-glass-icons
-# 或
+# or
 yarn add nucleo-glass-icons
 ```
 
-### 使用方法
+### Usage
 
 #### React
 
@@ -34,22 +36,22 @@ import React from 'react'
 function App() {
   return (
     <div>
-      {/* 基本使用 */}
+      {/* Basic usage */}
       <AppStack />
 
-      {/* 自定义大小 */}
+      {/* Custom size */}
       <AppStack size={32} />
 
-      {/* 使用 className */}
+      {/* Using className */}
       <AppStack className="my-icon" />
 
-      {/* 内联样式 */}
+      {/* Inline styles */}
       <AppStack style={{ margin: '10px' }} />
 
-      {/* 自定义渐变颜色 */}
+      {/* Custom gradient colors */}
       <AppStack stopColor1="#3b82f6" stopColor2="#1e40af" />
 
-      {/* 组合使用 */}
+      {/* Combination usage */}
       <AppStack
         size={48}
         className="custom-icon"
@@ -70,22 +72,22 @@ import { AppStack } from 'nucleo-glass-icons/vue'
 
 <template>
   <div>
-    <!-- 基本使用 -->
+    <!-- Basic usage -->
     <AppStack />
 
-    <!-- 自定义大小 -->
+    <!-- Custom size -->
     <AppStack :size="32" />
 
-    <!-- 使用 class -->
+    <!-- Using class -->
     <AppStack class="my-icon" />
 
-    <!-- 内联样式 -->
+    <!-- Inline styles -->
     <AppStack :style="{ margin: '10px' }" />
 
-    <!-- 自定义渐变颜色 -->
+    <!-- Custom gradient colors -->
     <AppStack stop-color1="#3b82f6" stop-color2="#1e40af" />
 
-    <!-- 组合使用 -->
+    <!-- Combination usage -->
     <AppStack
       :size="48"
       class="custom-icon"
@@ -96,45 +98,7 @@ import { AppStack } from 'nucleo-glass-icons/vue'
 </template>
 ```
 
-#### 动态导入
-
-##### React
-
-```tsx
-import { AppStackData } from 'nucleo-glass-icons'
-import { Icon } from 'nucleo-glass-icons/react'
-
-function DynamicIcon() {
-  return (
-    <Icon
-      data={AppStackData}
-      size={24}
-      stopColor1="#10b981"
-      stopColor2="#059669"
-    />
-  )
-}
-```
-
-##### Vue
-
-```vue
-<script setup>
-import { AppStackData } from 'nucleo-glass-icons'
-import { Icon } from 'nucleo-glass-icons/vue'
-</script>
-
-<template>
-  <Icon
-    :data="AppStackData"
-    :size="24"
-    stop-color1="#10b981"
-    stop-color2="#059669"
-  />
-</template>
-```
-
-#### 批量导入
+#### Bulk Import
 
 ```tsx
 // React
@@ -143,45 +107,45 @@ import { IconNames, Icons } from 'nucleo-glass-icons/react'
 // Vue
 import { IconNames, Icons } from 'nucleo-glass-icons/vue'
 
-// 所有图标
-console.log(Icons) // { AppStack: Component, ... }
+// All icons
+console.log(Icons) // [Component, ... }
 
-// 所有图标名称
+// All icon names
 console.log(IconNames) // ['AppStack', ... ]
 ```
 
 ### Props
 
-#### React 组件
+#### React Component
 
 | 属性 | 类型 | 默认值 | 描述 |
 |------|------|--------|------|
-| `size` | `number \| string` | `24` | 图标大小（宽度和高度） |
-| `className` | `string` | - | CSS 类名 |
-| `style` | `React.CSSProperties \| Record<string, any> \| string` | - | 内联样式 |
-| `stopColor1` | `string` | `'#575757'` | 第一个渐变停止颜色（替换 #575757） |
-| `stopColor2` | `string` | `'#151515'` | 第二个渐变停止颜色（替换 #151515） |
+| `size` | `number \| string` | `24` | Icon width and height |
+| `className` | `string` | - | CSS class name |
+| `style` | `React.CSSProperties \| Record<string, any> \| string` | - | Inline styles |
+| `stopColor1` | `string` | `'#575757'` | First gradient stop color (replaces #575757) |
+| `stopColor2` | `string` | `'#151515'` | Second gradient stop color (replaces #151515) |
 
-#### Vue 组件
+#### Vue Component
 
 | 属性 | 类型 | 默认值 | 描述 |
 |------|------|--------|------|
-| `size` | `number \| string` | `24` | 图标大小（宽度和高度） |
-| `class` | `string` | - | CSS 类名 |
-| `style` | `object \| string` | - | 内联样式 |
-| `stopColor1` | `string` | `'#575757'` | 第一个渐变停止颜色（替换 #575757） |
-| `stopColor2` | `string` | `'#151515'` | 第二个渐变停止颜色（替换 #151515） |
+| `size` | `number \| string` | `24` | Icon width and height |
+| `class` | `string` | - | CSS class |
+| `style` | `object \| string` | - | Inline styles |
+| `stopColor1` | `string` | `'#575757'` | First gradient stop color (replaces #575757) |
+| `stopColor2` | `string` | `'#151515'` | Second gradient stop color (replaces #151515) |
 
 ### 渐变颜色说明
 
-图标中的渐变颜色会自动替换：
+All gradient colors in an icon are automatically replaced:
 
-- `stop-color="#575757"` → 使用 `stopColor1` 的值
-- `stop-color="#151515"` → 使用 `stopColor2` 的值
+- `stop-color="#575757"` → `stopColor1`
+- `stop-color="#151515"` → `stopColor2`
 
-**示例：**
+**Example:**
 ```tsx
-// 原始 SVG 中的渐变
+// Original SVG gradient
 <linearGradient id="1752500502790-2257412_heart_existing_0_ik394vb0b" x1="8.505" y1="3" x2="8.505" y2="21.733" gradientUnits="userSpaceOnUse">
   <stop stop-color="#575757"></stop>
   <stop offset="1" stop-color="#151515"></stop>
@@ -189,63 +153,63 @@ console.log(IconNames) // ['AppStack', ... ]
 ```
 
 ```tsx
-// 使用自定义颜色后
+// Using custom colors
 <AppStack stopColor1="#3b82f6" stopColor2="#1e40af" />
-// 会生成：
+// Results in:
 // <stop stop-color="#3b82f6"></stop>
 // <stop offset="1" stop-color="#1e40af"></stop>
 ```
 
-**注意：** 一个 SVG 中可能有多个相同的 `stop-color` 值，都会被替换为对应的变量。
+**Note:** A single SVG may contain multiple stops with the same color; all will be replaced accordingly.
 
-### 开发
+### Development
 
-#### 构建
+#### Build
 
 ```bash
-# 使用 Rolldown 构建（推荐）
+# Recommended build using Rolldown
 pnpm run build
 ```
 
-构建过程会自动：
-1. 从 `public/icons/index.json` 读取图标数据
-2. 生成 React 和 Vue 图标组件
-3. 打包所有构建产物
-4. 自动清理临时生成的文件
+The build process automatically:
+1. Reads icon data from public/icons/index.json
+2. Generates React and Vue components
+3. Packages all artifacts
+4. Cleans up temporary files
 
-#### 包分析
+#### Bundle Analysis
 
 构建完成后，可以查看可视化的包分析报告：
 
 ```bash
-# 查看所有可用报告
+# View all reports
 pnpm run stats
 
-# 直接打开 React 入口分析报告（sunburst 视图）
+# React entry analysis (sunburst view)
 pnpm run stats:react
 
-# 直接打开 Vue 入口分析报告（network 视图）
+# Vue entry analysis (network view)
 pnpm run stats:vue
 
-# 构建并查看分析报告
+# Build and view report
 pnpm run analyze
 ```
 
-#### 开发模式
+#### Development Mode
 
 ```bash
-# 监听模式构建
+# Watch mode
 pnpm run dev
 ```
 
-### 技术栈
+### Tech Stack
 
-- **构建工具**: Rolldown
-- **包分析**: rollup-plugin-visualizer
-- **SVG 优化**: SVGO
-- **DOM 解析**: Cheerio
-- **类型检查**: TypeScript
+- **Build Tool**: Rolldown
+- **Bundle Analysis**: rollup-plugin-visualizer
+- **SVG Optimization**: SVGO
+- **DOM Parsing**: Cheerio
+- **Type Checking**: TypeScript
 
-### 许可证
+### License
 
 MIT

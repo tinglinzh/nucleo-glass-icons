@@ -73,7 +73,6 @@
     "@types/node": "catalog:types",
     "@types/react": "catalog:",
     "bumpp": "catalog:cli",
-    "cheerio": "catalog:",
     "eslint": "catalog:cli",
     "lint-staged": "catalog:cli",
     "react": "catalog:",

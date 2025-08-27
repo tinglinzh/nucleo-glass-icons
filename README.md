@@ -118,7 +118,7 @@ console.log(IconNames) // ['AppStack', ... ]
 
 #### React Component
 
-| 属性 | 类型 | 默认值 | 描述 |
+| Prop | Type | Default | Description |
 |------|------|--------|------|
 | `size` | `number \| string` | `24` | Icon width and height |
 | `className` | `string` | - | CSS class name |
@@ -128,7 +128,7 @@ console.log(IconNames) // ['AppStack', ... ]
 
 #### Vue Component
 
-| 属性 | 类型 | 默认值 | 描述 |
+| Prop | Type | Default | Description |
 |------|------|--------|------|
 | `size` | `number \| string` | `24` | Icon width and height |
 | `class` | `string` | - | CSS class |
@@ -136,7 +136,7 @@ console.log(IconNames) // ['AppStack', ... ]
 | `stopColor1` | `string` | `'#575757'` | First gradient stop color (replaces #575757) |
 | `stopColor2` | `string` | `'#151515'` | Second gradient stop color (replaces #151515) |
 
-### 渐变颜色说明
+### Gradient Color Explanation
 
 All gradient colors in an icon are automatically replaced:
 
@@ -167,7 +167,6 @@ All gradient colors in an icon are automatically replaced:
 #### Build
 
 ```bash
-# Recommended build using Rolldown
 pnpm run build
 ```
 
@@ -177,37 +176,11 @@ The build process automatically:
 3. Packages all artifacts
 4. Cleans up temporary files
 
-#### Bundle Analysis
-
-构建完成后，可以查看可视化的包分析报告：
-
-```bash
-# View all reports
-pnpm run stats
-
-# React entry analysis (sunburst view)
-pnpm run stats:react
-
-# Vue entry analysis (network view)
-pnpm run stats:vue
-
-# Build and view report
-pnpm run analyze
-```
-
-#### Development Mode
-
-```bash
-# Watch mode
-pnpm run dev
-```
-
 ### Tech Stack
 
 - **Build Tool**: Rolldown
 - **Bundle Analysis**: rollup-plugin-visualizer
 - **SVG Optimization**: SVGO
-- **DOM Parsing**: Cheerio
 - **Type Checking**: TypeScript
 
 ### License

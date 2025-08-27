@@ -165,7 +165,6 @@ console.log(IconNames) // ['AppStack', ... ]
 #### 构建
 
 ```bash
-# 使用 Rolldown 构建（推荐）
 pnpm run build
 ```
 
@@ -175,37 +174,11 @@ pnpm run build
 3. 打包所有构建产物
 4. 自动清理临时生成的文件
 
-#### 包分析
-
-构建完成后，可以查看可视化的包分析报告：
-
-```bash
-# 查看所有可用报告
-pnpm run stats
-
-# 直接打开 React 入口分析报告（sunburst 视图）
-pnpm run stats:react
-
-# 直接打开 Vue 入口分析报告（network 视图）
-pnpm run stats:vue
-
-# 构建并查看分析报告
-pnpm run analyze
-```
-
-#### 开发模式
-
-```bash
-# 监听模式构建
-pnpm run dev
-```
-
 ### 技术栈
 
 - **构建工具**: Rolldown
 - **包分析**: rollup-plugin-visualizer
 - **SVG 优化**: SVGO
-- **DOM 解析**: Cheerio
 - **类型检查**: TypeScript
 
 ### 许可证

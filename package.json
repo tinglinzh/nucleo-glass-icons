@@ -1,7 +1,7 @@
 {
   "name": "nucleo-glass-icons",
   "type": "module",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "private": false,
   "publishConfig": {
     "access": "public"
@@ -47,7 +47,6 @@
     "generate": "tsx scripts/generate.ts",
     "lint": "eslint",
     "prepublishOnly": "pnpm run build",
-
     "start": "tsx src/index.ts",
     "typecheck": "tsc --noEmit",
     "prepare": "simple-git-hooks",

@@ -1,40 +1,130 @@
 import { existsSync } from 'node:fs'
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { visualizer } from 'rollup-plugin-visualizer'
+import { optimize } from 'svgo'
 
-// ==================== 图标生成逻辑 ====================
+// ==================== icon generation ====================
 
-// 清理生成的图标文件
-async function cleanupGeneratedIcons() {
-  console.log('🧹 Cleaning up generated icon files...')
+const ICONS_JSON_PATH = 'public/icons/index.json'
+const REACT_ICONS_DIR = 'src/react/icons'
+const VUE_ICONS_DIR = 'src/vue/icons'
 
-  try {
-    if (existsSync('src/react/icons')) {
-      await rm('src/react/icons', { recursive: true, force: true })
-      console.log('✅ Cleaned up src/react/icons')
-    }
+// Generation is shared across the 4 rolldown sub-builds. Guard so we only run
+// it once per process (and once per watch round) instead of 4×.
+let generationPromise: Promise<void> | null = null
 
-    if (existsSync('src/vue/icons')) {
-      await rm('src/vue/icons', { recursive: true, force: true })
-      console.log('✅ Cleaned up src/vue/icons')
-    }
-  }
-  catch (error) {
-    console.log('⚠️  Warning: Could not clean up some icon files:', error)
-  }
+function pascalCase(name: string): string {
+  return name
+    .replace(/[-_](.)/g, (_, ch: string) => ch.toUpperCase())
+    .replace(/^(.)/, (_, ch: string) => ch.toUpperCase())
 }
 
-// 生成所有图标
-async function generateAllIcons() {
-  const iconsJsonPath = 'public/icons/index.json'
+function optimizeSvg(rawSvg: string): { content: string, viewBox: string } {
+  const result = optimize(rawSvg, {
+    multipass: true,
+    plugins: [
+      {
+        name: 'preset-default',
+        params: {
+          overrides: {
+            removeViewBox: false,
+            // Each icon has its own ID namespace; renaming is safe because
+            // svgo also rewrites url(#...) references in the same pass.
+            cleanupIds: { remove: true, minify: true },
+          },
+        },
+      },
+    ],
+  })
+  const optimized = result.data
 
-  if (!existsSync(iconsJsonPath)) {
-    console.log('❌ Icons JSON file not found at icons/index.json')
+  const viewBoxMatch = optimized.match(/viewBox="([^"]+)"/)
+  const viewBox = viewBoxMatch ? viewBoxMatch[1] : '0 0 24 24'
+
+  const inner = optimized.match(/<svg[^>]*>([\s\S]*)<\/svg>/)
+  const content = inner ? inner[1] : optimized
+
+  return { content, viewBox }
+}
+
+function generateReactIcon(componentName: string, viewBox: string, content: string): string {
+  return `import { createIcon } from '../create'
+
+export const ${componentName} = /* @__PURE__ */ createIcon({
+  name: '${componentName}',
+  viewBox: '${viewBox}',
+  content: ${JSON.stringify(content)},
+})
+
+export default ${componentName}
+`
+}
+
+function generateVueIcon(componentName: string, viewBox: string, content: string): string {
+  return `import { createIcon } from '../create'
+
+export const ${componentName} = /* @__PURE__ */ createIcon({
+  name: '${componentName}',
+  viewBox: '${viewBox}',
+  content: ${JSON.stringify(content)},
+})
+
+export default ${componentName}
+`
+}
+
+async function generateIndexFiles(componentNames: string[], fileNames: string[]) {
+  const importLines = componentNames
+    .map((name, i) => `import { ${name} } from './${fileNames[i]}'`)
+    .join('\n')
+
+  const reactIndex = `// Auto-generated at build time
+${importLines}
+
+export {
+${componentNames.map(n => `  ${n},`).join('\n')}
+}
+
+export const Icons = [
+${componentNames.map(n => `  ${n},`).join('\n')}
+]
+
+export const IconNames = [
+${componentNames.map(n => `  '${n}',`).join('\n')}
+] as const
+
+export type IconName = typeof IconNames[number]
+`
+
+  const vueIndex = `// Auto-generated at build time
+${importLines}
+
+export {
+${componentNames.map(n => `  ${n},`).join('\n')}
+}
+
+export const Icons = [
+${componentNames.map(n => `  ${n},`).join('\n')}
+]
+
+export const IconNames = [
+${componentNames.map(n => `  '${n}',`).join('\n')}
+] as const
+
+export type IconName = typeof IconNames[number]
+`
+
+  await writeFile(`${REACT_ICONS_DIR}/index.ts`, reactIndex)
+  await writeFile(`${VUE_ICONS_DIR}/index.ts`, vueIndex)
+}
+
+async function generateAllIcons() {
+  if (!existsSync(ICONS_JSON_PATH)) {
+    console.log(`❌ Icons JSON file not found at ${ICONS_JSON_PATH}`)
     return
   }
 
-  const iconsJsonContent = await readFile(iconsJsonPath, 'utf-8')
-  const iconsData = JSON.parse(iconsJsonContent)
+  const iconsData = JSON.parse(await readFile(ICONS_JSON_PATH, 'utf-8'))
 
   if (!Array.isArray(iconsData)) {
     console.log('❌ Invalid JSON format: expected array of icons')
@@ -43,205 +133,86 @@ async function generateAllIcons() {
 
   console.log(`📦 Generating ${iconsData.length} icons at build time...`)
 
-  // 确保目录存在
-  const dirs = ['src/react/icons', 'src/vue/icons']
-  for (const dir of dirs) {
-    if (!existsSync(dir)) {
-      await mkdir(dir, { recursive: true })
-    }
-  }
+  await Promise.all([
+    mkdir(REACT_ICONS_DIR, { recursive: true }),
+    mkdir(VUE_ICONS_DIR, { recursive: true }),
+  ])
 
-  // 生成 React 图标
-  for (const icon of iconsData) {
-    const componentName = icon.name
-      .replace(/[-_](.)/g, (_, char) => char.toUpperCase())
-      .replace(/^(.)/, char => char.toUpperCase())
+  const componentNames: string[] = []
+  const fileNames: string[] = []
 
+  await Promise.all(iconsData.map(async (icon: any) => {
+    const componentName = pascalCase(icon.name)
     const fileName = icon.name.replace(/[-_]/g, '-').toLowerCase()
+    const { content, viewBox } = optimizeSvg(icon.svg)
 
-    // 生成 React 组件
-    const reactContent = generateReactIcon(icon, componentName)
-    await writeFile(`src/react/icons/${fileName}.ts`, reactContent)
+    await Promise.all([
+      writeFile(`${REACT_ICONS_DIR}/${fileName}.ts`, generateReactIcon(componentName, viewBox, content)),
+      writeFile(`${VUE_ICONS_DIR}/${fileName}.ts`, generateVueIcon(componentName, viewBox, content)),
+    ])
 
-    // 生成 Vue 组件
-    const vueContent = generateVueIcon(icon, componentName)
-    await writeFile(`src/vue/icons/${fileName}.ts`, vueContent)
-  }
+    componentNames.push(componentName)
+    fileNames.push(fileName)
+  }))
 
-  // 生成索引文件
-  await generateIndexFiles(iconsData)
+  await generateIndexFiles(componentNames, fileNames)
 
   console.log('✅ All icons generated successfully!')
 }
 
-// 生成 React 图标组件
-function generateReactIcon(icon: any, componentName: string): string {
-  const contentMatch = icon.svg.match(/<svg[^>]*>([\s\S]*)<\/svg>/)
-  const content = contentMatch ? contentMatch[1] : icon.svg
-
-  const viewBoxMatch = icon.svg.match(/viewBox="([^"]+)"/)
-  const viewBox = viewBoxMatch ? viewBoxMatch[1] : '0 0 24 24'
-
-  return `import type { IconProps } from '../../types'
-import React from 'react'
-
-const ${componentName}Data = {
-  name: '${componentName}',
-  content: \`${content}\`,
-  viewBox: '${viewBox}',
+async function cleanupGeneratedIcons() {
+  console.log('🧹 Cleaning up generated icon files...')
+  try {
+    await Promise.all([
+      rm(REACT_ICONS_DIR, { recursive: true, force: true }),
+      rm(VUE_ICONS_DIR, { recursive: true, force: true }),
+    ])
+    console.log('✅ Cleaned up generated icons')
+  }
+  catch (error) {
+    console.log('⚠️  Warning: could not clean up icon files:', error)
+  }
 }
 
-export const ${componentName}: React.FC<IconProps> = (props) => {
-  const { size = 24, className, style, stopColor1 = '#575757', stopColor2 = '#151515', ...rest } = props
-  const sizeValue = typeof size === 'number' ? \`\${size}px\` : size
-  
-  // Replace stop-color values in SVG content
-  const processedContent = ${componentName}Data.content
-    .replace(/stop-color="#575757"/g, \`stop-color="\${stopColor1}"\`)
-    .replace(/stop-color="#151515"/g, \`stop-color="\${stopColor2}"\`)
-  
-  return React.createElement('svg', {
-    width: sizeValue,
-    height: sizeValue,
-    viewBox: '${viewBox}',
-    className,
-    style,
-    ...rest,
-  }, React.createElement('g', { 
-    dangerouslySetInnerHTML: { __html: processedContent } 
-  }))
-}
+// ==================== plugins ====================
 
-export default ${componentName}
-`
-}
-
-// 生成 Vue 图标组件
-function generateVueIcon(icon: any, componentName: string): string {
-  const contentMatch = icon.svg.match(/<svg[^>]*>([\s\S]*)<\/svg>/)
-  const content = contentMatch ? contentMatch[1] : icon.svg
-
-  const viewBoxMatch = icon.svg.match(/viewBox="([^"]+)"/)
-  const viewBox = viewBoxMatch ? viewBoxMatch[1] : '0 0 24 24'
-
-  return `import { defineComponent, h, computed } from 'vue'
-
-const ${componentName}Data = {
-  name: '${componentName}',
-  content: \`${content}\`,
-  viewBox: '${viewBox}',
-}
-
-export const ${componentName} = defineComponent({
-  name: '${componentName}',
-  props: {
-    size: { type: [Number, String], default: 24 },
-    class: String,
-    style: [Object, String],
-    stopColor1: { type: String, default: '#575757' },
-    stopColor2: { type: String, default: '#151515' },
-  },
-  setup(props, { attrs }) {
-    const processedContent = computed(() => {
-      return ${componentName}Data.content
-        .replace(/stop-color="#575757"/g, \`stop-color="\${props.stopColor1}"\`)
-        .replace(/stop-color="#151515"/g, \`stop-color="\${props.stopColor2}"\`)
-    })
-
-    return () => {
-      const { size = 24, class: className, style } = props
-      const sizeValue = typeof size === 'number' ? \`\${size}px\` : size
-      
-      return h('svg', {
-        width: sizeValue,
-        height: sizeValue,
-        viewBox: '${viewBox}',
-        class: className,
-        style,
-        ...attrs,
-      }, [h('g', { innerHTML: processedContent.value })])
-    }
-  },
-})
-
-export default ${componentName}
-`
-}
-
-// 生成索引文件
-async function generateIndexFiles(icons: any[]) {
-  const componentNames = icons.map(icon =>
-    icon.name.replace(/[-_](.)/g, (_, char) => char.toUpperCase()).replace(/^(.)/, char => char.toUpperCase()),
-  )
-
-  // 使用原始图标名称作为文件名（保留连字符和下划线）
-  const fileName = (name: string) => name
-
-  // React 索引
-  const reactIndex = `// Auto-generated at build time
-${componentNames.map((name, index) => `import { ${name} } from './${fileName(icons[index].name)}'`).join('\n')}
-
-export {
-${componentNames.map(name => `  ${name}`).join(',\n')}
-}
-
-export const Icons = [
-${componentNames.map(name => `  ${name}`).join(',\n')}
-]
-
-export const IconNames = [
-${componentNames.map(name => `  '${name}'`).join(',\n')}
-] as const
-
-export type IconName = typeof IconNames[number]
-`
-
-  // Vue 索引
-  const vueIndex = `// Auto-generated at build time
-${componentNames.map((name, index) => `import { ${name} } from './${fileName(icons[index].name)}'`).join('\n')}
-
-export {
-${componentNames.map(name => `  ${name}`).join(',\n')}
-}
-
-export const Icons = [
-${componentNames.map(name => `  ${name}`).join(',\n')}
-]
-
-export const IconNames = [
-${componentNames.map(name => `  '${name}'`).join(',\n')}
-] as const
-
-export type IconName = typeof IconNames[number]
-`
-
-  await writeFile('src/react/icons/index.ts', reactIndex)
-  await writeFile('src/vue/icons/index.ts', vueIndex)
-}
-
-// ==================== 插件函数 ====================
-
-// 图标生成插件
+/**
+ * Icon generator plugin.
+ *
+ * The shared `generationPromise` makes this idempotent across the 4 rolldown
+ * sub-builds (react/vue × main/dts) — we only do the SVGO + filesystem work
+ * once per build session.
+ */
 export function iconGeneratorPlugin() {
   return {
     name: 'icon-generator',
     async buildStart() {
-      await generateAllIcons()
+      if (!generationPromise) {
+        generationPromise = generateAllIcons().catch((err) => {
+          generationPromise = null
+          throw err
+        })
+      }
+      await generationPromise
     },
   }
 }
 
-// 清理插件
+/**
+ * Cleanup plugin. Must `await` the async cleanup so rolldown doesn't exit
+ * before files are removed.
+ */
 export function cleanupPlugin() {
   return {
     name: 'cleanup-after-dts',
-    closeBundle() {
-      cleanupGeneratedIcons()
+    async closeBundle() {
+      await cleanupGeneratedIcons()
+      // Reset so a subsequent watch round regenerates.
+      generationPromise = null
     },
   }
 }
 
-// 可视化分析插件
 export function createVisualizerPlugin(filename: string, template: 'sunburst' | 'network' = 'sunburst') {
   return visualizer({
     filename,

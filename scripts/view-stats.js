@@ -6,8 +6,8 @@ import { join } from 'node:path'
 import { process } from 'node:process'
 
 const statsFiles = [
-  { name: 'React Bundle', file: 'dist/stats-react.html' },
-  { name: 'Vue Bundle', file: 'dist/stats-vue.html' },
+  { name: 'React Bundle', file: 'dist/react/stats.html' },
+  { name: 'Vue Bundle', file: 'dist/vue/stats.html' },
 ]
 
 console.log('📊 Available bundle analysis reports:')

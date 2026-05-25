@@ -10,6 +10,13 @@ on:
 jobs:
   publish-npm:
     runs-on: ubuntu-latest
+    permissions:
+      # required for `git push` of the release tag
+      contents: write
+      # required so pnpm 11+ can mint an OIDC token for npm trusted publishing
+      # (also silences the "ERR_PNPM_ID_TOKEN_GITHUB_WORKFLOW_INCORRECT_PERMISSIONS"
+      # warning even if you stay on classic-token auth)
+      id-token: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -53,6 +60,19 @@ jobs:
       - name: Build project
         if: steps.check-version.outputs.publish == 'true'
         run: pnpm run build
+
+      - name: Verify npm auth
+        if: steps.check-version.outputs.publish == 'true'
+        # Fails fast with a clear message if NPM_TOKEN is missing or invalid,
+        # instead of getting an opaque 404 from `pnpm publish` later.
+        run: |
+          if ! npm whoami; then
+            echo "::error::npm whoami failed — NPM_TOKEN secret is missing, invalid, expired, or read-only."
+            echo "::error::Create a token at https://www.npmjs.com/settings/<user>/tokens with type 'Automation' or 'Publish' and store it as the repo secret NPM_TOKEN."
+            exit 1
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish to NPM
         if: steps.check-version.outputs.publish == 'true'

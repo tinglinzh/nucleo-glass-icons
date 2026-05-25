@@ -90,11 +90,5 @@
   },
   "lint-staged": {
     "*": "eslint --fix"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "simple-git-hooks"
-    ]
   }
 }

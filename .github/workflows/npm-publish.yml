@@ -46,7 +46,9 @@ jobs:
 
       - name: Install dependencies
         if: steps.check-version.outputs.publish == 'true'
-        run: pnpm install --frozen-lockfile
+        # --ignore-scripts: esbuild's binary download and simple-git-hooks's
+        # git-hook installation are both useless in a publish CI job.
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Build project
         if: steps.check-version.outputs.publish == 'true'

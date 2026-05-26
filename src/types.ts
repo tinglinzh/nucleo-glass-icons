@@ -86,6 +86,45 @@ export function applyStopColors(
 }
 
 /**
+ * Prefix every `id="X"` and `url(#X)` reference inside the SVG content with a
+ * unique value so multiple icon instances on the same page don't collide on
+ * short minified IDs (a, b, c, ...). Without this, the browser resolves every
+ * `url(#a)` to the first `#a` in document order across all rendered icons.
+ */
+export function applyIdPrefix(content: string, prefix: string): string {
+  if (!prefix) {
+    return content
+  }
+  return content
+    .replace(/id="([^"]+)"/g, (_, id) => `id="${prefix}${id}"`)
+    .replace(/url\(#([^)]+)\)/g, (_, id) => `url(#${prefix}${id})`)
+}
+
+/**
+ * Combined transform: stop-color overrides + per-instance ID namespacing.
+ */
+export function transformContent(
+  content: string,
+  stopColor1: string | undefined,
+  stopColor2: string | undefined,
+  idPrefix: string,
+): string {
+  return applyIdPrefix(applyStopColors(content, stopColor1, stopColor2), idPrefix)
+}
+
+let _localUidCounter = 0
+/**
+ * Monotonically increasing base36 suffix. Used as a fallback when the host
+ * framework does not provide an SSR-safe `useId` primitive (React <18,
+ * Vue <3.5). For client-only rendering this is sufficient; SSR users on
+ * older versions should upgrade to get hydration-safe IDs.
+ */
+export function nextLocalUid(): string {
+  _localUidCounter = (_localUidCounter + 1) | 0
+  return _localUidCounter.toString(36)
+}
+
+/**
  * Build the final attribute bag for the root <svg>.
  * NOTE: stopColor1/stopColor2 are intentionally consumed here, not forwarded.
  */

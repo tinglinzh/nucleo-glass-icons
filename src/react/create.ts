@@ -1,19 +1,29 @@
 import type { IconComponent, IconData, IconProps } from '../types'
 import React from 'react'
-import { applyStopColors, getSvgAttributes } from '../types'
+import { getSvgAttributes, nextLocalUid, transformContent } from '../types'
+
+// Feature-detect React.useId (React 18+). On older versions we fall back to a
+// module-scoped counter captured once per instance via useState. The hook is
+// picked once at module load so hook order stays stable across renders.
+const _useId: (() => string) | undefined = (React as any).useId
+const useUniquePrefix: () => string = _useId
+  ? () => `g${_useId!().replace(/:/g, '')}-`
+  : () => React.useState(() => `g${nextLocalUid()}-`)[0]
 
 /**
  * Create a memoized, ref-forwarding React icon component from icon data.
  *
- * The color override path is short-circuited inside `applyStopColors` when both
- * colors equal the defaults, so the common-case render is allocation-free.
+ * Every render gets a stable per-instance ID prefix so multiple icons on the
+ * same page never share an `#a` defs entry. The color override + prefix work
+ * is memoized on its inputs to keep the common-case render allocation-free.
  */
 export function createIcon(iconData: IconData): IconComponent {
   const Component = React.forwardRef<SVGSVGElement, IconProps>((props, ref) => {
     const { stopColor1, stopColor2 } = props
+    const idPrefix = useUniquePrefix()
     const innerHTML = React.useMemo(
-      () => ({ __html: applyStopColors(iconData.content, stopColor1, stopColor2) }),
-      [stopColor1, stopColor2],
+      () => ({ __html: transformContent(iconData.content, stopColor1, stopColor2, idPrefix) }),
+      [stopColor1, stopColor2, idPrefix],
     )
     const svgProps = getSvgAttributes(iconData, props)
 
